@@ -21,7 +21,34 @@ class Entidad(ABC):
 
     #Especialistas 
 class Ingeniero(Entidad):
-     def __init__(self, nombre, energia):
+    def __init__(self, nombre, energia):
           super().__init__(nombre, energia) #Se llama al constructor de la base en este caso entidad
-          self._repuestos = 3 #Atributo unico de Ingeniero es la cantidad de reparaciones posibles
-          #este es un atributo que solo le pertenece a esta clase por cual aunque herede entidad esto lo vuelve unico 
+          self._potencia_reparacion = 15 # Esto es cuanto puede arreglar por turno esto es un atributo especifico 
+    def ejecutar_turno(self):
+        gasto_energia = 5
+        self._energia -= gasto_energia
+        self.recibir_daño(gasto_energia) #Aqui se utiliza de vuelta el metodo que ya fue creado Recibir daño
+        print (f" {self._nombre} ha reparado el reactor termico.")
+        print (f"Gasto de energia por trabajo: {gasto_energia}. Energia actual: {self._energia}")
+
+        return self._potencia_reparacion # Esto devuelve la cantidad de reparaciones que realizo 
+    
+class Recolector(Entidad):
+    def __init__(self, nombre, energia):
+          super().__init__(nombre, energia)
+          #Caracterista unica de clase Recolector
+          self._capacidad_recoleccion = 20
+    def ejecutar_turno(self):
+        if self._estado == "Caido":   # Su es personaje esta caido no puede realizar acciones por lo cual aqui se valida eso
+            print(f" {self._nombre} esta en el suelo y no puede buscar suministros.")
+            return 0  #No aporta nada en este turno
+          #Buscar en la tormenta claro que es agotador por lo cual ...
+        desgaste = 10
+        print (f"{self._nombre} se interna en la nieve buscando recursos....")
+        self.recibir_daño(desgaste)
+          # Si despues del desgaste quedo caido lo que pasara sera que recolectara la mitad por el esfuerzo empleado
+        if self._estado == "Caido":
+               print("f{self._nombre} colapso durante la expediccion")
+               return self._capacidad_recoleccion // 2 
+          # Si todo salio bien devolvera el total de los recursos obtenidos 
+        return self._capacidad_recoleccion
