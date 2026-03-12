@@ -48,7 +48,25 @@ class Recolector(Entidad):
         self.recibir_daño(desgaste)
           # Si despues del desgaste quedo caido lo que pasara sera que recolectara la mitad por el esfuerzo empleado
         if self._estado == "Caido":
-               print("f{self._nombre} colapso durante la expediccion")
+               print(f"{self._nombre} colapso durante la expediccion")
                return self._capacidad_recoleccion // 2 
           # Si todo salio bien devolvera el total de los recursos obtenidos 
         return self._capacidad_recoleccion
+    
+class Explorador(Entidad):
+    def __init__(self, nombre, energia):
+          super().__init__(nombre, energia)
+          #caracterista unica de clase Explorador 
+          self._rango_exploracion = 20
+    def ejecutar_turno(self):
+        if self._estado == "Caido": #Si el explorador eata caido no puede realizar acciones por lo cual aqui se valida eso
+            print(f" {self._nombre} esta en el suelo y no puede seguir explorando.")
+            return 0  #No aporta nada en este turno
+        desgaste = 8 #Al explorar se cansa menos
+        print(f"{self._nombre}esta mirando el horizonte...")
+        self.recibir_daño(desgaste) 
+
+        if self._estado == "Caido":
+             print (f"{self.nombre} colapso durante la expediccion por lo cual no puede continuar")
+             return self._rango_exploracion //2
+        return self._rango_exploracion 
