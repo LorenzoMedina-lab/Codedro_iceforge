@@ -1,4 +1,4 @@
-from entidades import Ingeniero, Recolector, Explorador
+from entidades import Ingeniero, Recolector, Explorador   #Motor
 
 class Juego:
     def __init__(self):
@@ -30,22 +30,18 @@ class Juego:
             
             # PASO 1 y 2: Cada especialista actúa
             for especialista in self._equipo: #Aqui es donde recorre la lista de especialistas para ejecutar cada turno.
-                valor = especialista.ejecutar_turno()
+                recurso,valor = especialista.ejecutar_turno() # El especialista ejecuta su turno y devuelve el tipo de accion y el valor asociado (reparacion o recoleccion)  
                 
                 #En el segundo paso se procesa segun el resultado de la clase.
-                if isinstance(especialista, Ingeniero):
-                    self._integridad_base += valor
-                    # Seguridad: La base no puede repararse más del 100%
-                    if self._integridad_base > 100:
-                        self._integridad_base = 100
+                if recurso == "Base":
+                    self._integridad_base += valor # Si el recurso es Base, se repara la base aumentando su integridad.
                         
-                elif isinstance(especialista, Recolector):
-                    self._suministros += valor
+                elif recurso == "Suministros":
+                    self._suministros += valor # Si el recurso es Suministros, se suman los suministros recolectados a la reserva total.
                     
-                elif isinstance(especialista, Explorador):
-                    #El explorador aqui podria reducir el daño que la base recibe.
-                    # CAMBIO TÉCNICO: Usamos .nombre (Getter) en lugar de ._nombre
-                    print(f"-> {especialista.nombre} ha despejado el camino.")
+                elif recurso == "Exploracion":
+                    print(f"-> {especialista.get_nombre()} ha despejado el camino.")
+                if self._integridad_base > 100: self._integridad_base = 100 # Filtro para que la integridad de la base no supere el 100%
 
             #El paso 3 es desgaste diario de la colonia.
             self._suministros -= 20 #La colonia consume recursos cada dia.
