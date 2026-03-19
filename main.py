@@ -1,4 +1,4 @@
-from motor import Juego
+from motor import Juego     #Ui Consola
 
 def ejecutar_programa():
     # Se Crea la instancia del "Cerebro" del juego.
